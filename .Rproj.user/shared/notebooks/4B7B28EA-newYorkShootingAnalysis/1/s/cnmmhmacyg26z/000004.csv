@@ -1,0 +1,34 @@
+"0","url_in <- ""https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD"""
+"0",""
+"0","baseData <- read_csv(url_in)"
+"1","[1m[1mRows: [1m[22m[34m[34m23568[34m[39m [1m[1mColumns: [1m[22m[34m[34m19[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (11): OCCUR_DATE, OCCUR_TIME, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, VIC_AGE_GROUP, VIC_SEX, VIC_RACE, Lon_Lat
+[32mdbl[39m  (5): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, Latitude, Longitude
+[33mlgl[39m  (1): STATISTICAL_MURDER_FLAG
+"
+"1","
+[36mi[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
+"0","baseData <- select(baseData, 1:15)"
+"0","url_in <- ""https://data.cityofnewyork.us/api/views/5ucz-vwe8/rows.csv?accessType=DOWNLOAD"""
+"0",""
+"0","currentData <-read_csv(url_in)"
+"1","[1m[1mRows: [1m[22m[34m[34m902[34m[39m [1m[1mColumns: [1m[22m[34m[34m19[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (10): OCCUR_DATE, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, VIC_AGE_GROUP, VIC_SEX, VIC_RACE, New Georeferenced Co...
+[32mdbl[39m   (7): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, X_COORD_CD, Y_COORD_CD, Latitude, Longitude
+[33mlgl[39m   (1): STATISTICAL_MURDER_FLAG
+[34mtime[39m  (1): OCCUR_TIME
+"
+"1","
+[36mi[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
+"0","currentData <- select(currentData, 1:15)"
+"0","baseData <- rbind(currentData, baseData)"

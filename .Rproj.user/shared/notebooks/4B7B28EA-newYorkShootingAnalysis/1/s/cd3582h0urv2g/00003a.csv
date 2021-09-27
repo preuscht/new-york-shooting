@@ -1,0 +1,3 @@
+"0",""
+"0","ggplot(shootingByTime, aes(x=Hour, y=shootings)) + "
+"0","  geom_bar(stat = ""identity"")"

@@ -1,0 +1,18 @@
+"0","url_in <- ""https://raw.githubusercontent.com/preuscht/covid-19-analysis/main/covid_data.csv"""
+"0",""
+"0","baseCovidData <- read_csv(url_in)"
+"2","New names:
+* `` -> ...1
+"
+"1","[1m[1mRows: [1m[22m[34m[34m12047[34m[39m [1m[1mColumns: [1m[22m[34m[34m18[34m[39m
+"
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m   (3): Province_State.x, stateAbbrev, Province_State.y
+[32mdbl[39m  (14): ...1, total_population, total_deaths, pop_not_home, pop_at_home, total_cases, vaccinations, vaccine_rate, home_rate, not_hom...
+[34mdate[39m  (1): date
+"
+"1","
+[36mi[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"

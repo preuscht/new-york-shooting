@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(top10Locations, aes(x=LOCATION_DESC, y=shootings)) + "
+"0","  geom_bar(stat = ""identity"") + "
+"0","  theme(axis.text.x = element_text(angle = 90))"

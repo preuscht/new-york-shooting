@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(shootingByTime, aes(x="""", y=shootings, fill=Hour)) +"
+"0","  geom_bar(stat=""identity"", width=1) +"
+"0","  coord_polar(""y"", start=0)"

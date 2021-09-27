@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(shootingByBORO, aes(x=BORO, y=shootings)) + "
+"0","  geom_bar(stat = ""identity"") + "
+"0","  theme(axis.text.x = element_text(angle = 90))"

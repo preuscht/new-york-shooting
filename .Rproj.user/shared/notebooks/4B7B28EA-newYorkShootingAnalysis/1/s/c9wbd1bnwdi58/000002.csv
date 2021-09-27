@@ -1,0 +1,8 @@
+"0","pred = predict(mod, test, interval = ""prediction"")"
+"0","conf = predict(mod, test, interval = ""confidence"")"
+"0","pred <- as.data.frame(pred)"
+"0","multiVariateDatawPred <- data.frame(pred,test)"
+"0","#multiVariateDatawPred <- multiVariateData %>% rowwise() %>% mutate(predicted = #list(predict(mod, interval = ""prediction"")))"
+"0",""
+"0","#multiVariateDatawPred$predicted"
+"0",""

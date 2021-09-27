@@ -1,0 +1,3 @@
+"0",""
+"0","multiVariateDatawPred %>% ggplot() + geom_point(aes(x = BORO, y = shootings), color = ""blue"")+"
+"0","  geom_point(aes(x = BORO, y = fit), color =""red"")"

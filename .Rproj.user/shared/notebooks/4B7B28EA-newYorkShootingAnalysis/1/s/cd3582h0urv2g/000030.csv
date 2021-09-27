@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(top10Locations, aes(x="""", y=shootings, fill=LOCATION_DESC)) +"
+"0","  geom_bar(stat=""identity"", width=1) +"
+"0","  coord_polar(""y"", start=0)"

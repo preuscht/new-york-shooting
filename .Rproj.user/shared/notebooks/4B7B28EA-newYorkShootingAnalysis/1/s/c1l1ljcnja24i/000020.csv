@@ -1,0 +1,4 @@
+"0",""
+"0","multiVariateDatawPred %>% ggplot() + geom_point(aes(x = LOCATION_DESC, y = shootings), color = ""blue"")+"
+"0","  geom_point(aes(x = LOCATION_DESC, y = fit), color =""red"")+theme(axis.text.x = element_text(angle = 90))"
+"0",""

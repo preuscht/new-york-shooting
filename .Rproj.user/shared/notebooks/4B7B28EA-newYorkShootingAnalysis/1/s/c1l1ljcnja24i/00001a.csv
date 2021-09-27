@@ -1,0 +1,4 @@
+"0",""
+"0",""
+"0","covidDataWithPrediction %>% ggplot() + geom_point(aes(x = date, y = shootings), color = ""blue"")+"
+"0","  geom_point(aes(x = date, y = fit), color =""red"")"
