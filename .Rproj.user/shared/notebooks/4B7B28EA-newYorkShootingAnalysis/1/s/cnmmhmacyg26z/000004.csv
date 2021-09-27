@@ -3,7 +3,7 @@
 "0","baseData <- read_csv(url_in)"
 "1","[1m[1mRows: [1m[22m[34m[34m23568[34m[39m [1m[1mColumns: [1m[22m[34m[34m19[34m[39m
 "
-"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------------------------------[39m
 [1mDelimiter:[22m "",""
 [31mchr[39m (11): OCCUR_DATE, OCCUR_TIME, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, VIC_AGE_GROUP, VIC_SEX, VIC_RACE, Lon_Lat
 [32mdbl[39m  (5): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, Latitude, Longitude
@@ -19,9 +19,9 @@
 "0","currentData <-read_csv(url_in)"
 "1","[1m[1mRows: [1m[22m[34m[34m902[34m[39m [1m[1mColumns: [1m[22m[34m[34m19[34m[39m
 "
-"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------------------------------[39m
 [1mDelimiter:[22m "",""
-[31mchr[39m  (10): OCCUR_DATE, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, VIC_AGE_GROUP, VIC_SEX, VIC_RACE, New Georeferenced Co...
+[31mchr[39m  (10): OCCUR_DATE, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, VIC_AGE_GROUP, VIC_SEX, VIC_RACE, New Georeferenced Column
 [32mdbl[39m   (7): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, X_COORD_CD, Y_COORD_CD, Latitude, Longitude
 [33mlgl[39m   (1): STATISTICAL_MURDER_FLAG
 [34mtime[39m  (1): OCCUR_TIME

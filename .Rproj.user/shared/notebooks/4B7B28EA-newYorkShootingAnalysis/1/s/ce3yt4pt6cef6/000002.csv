@@ -1,0 +1,5 @@
+"0",""
+"0","ny_regression_data <-  filter(baseCovidData, stateAbbrev == ""NY"")"
+"0",""
+"0","covid_shooting_regression_data <- ny_regression_data %>% inner_join(shootingByDate,by=""date"")"
+"0",""

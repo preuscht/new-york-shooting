@@ -6,10 +6,10 @@
 "
 "1","[1m[1mRows: [1m[22m[34m[34m12047[34m[39m [1m[1mColumns: [1m[22m[34m[34m18[34m[39m
 "
-"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------[39m
+"1","[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------------------------------------------------------------------------[39m
 [1mDelimiter:[22m "",""
 [31mchr[39m   (3): Province_State.x, stateAbbrev, Province_State.y
-[32mdbl[39m  (14): ...1, total_population, total_deaths, pop_not_home, pop_at_home, total_cases, vaccinations, vaccine_rate, home_rate, not_hom...
+[32mdbl[39m  (14): ...1, total_population, total_deaths, pop_not_home, pop_at_home, total_cases, vaccinations, vaccine_rate, home_rate, not_home_rate, pct_change_cases...
 [34mdate[39m  (1): date
 "
 "1","

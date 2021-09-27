@@ -19,7 +19,7 @@ library(tinytex)
 ## Summary
 In this document I test 2 seperate datasets to see if any statistically significant results can be found. I first focused on features within the datasets to try and predict shootings. I focused on 3 variables that I felt would be predictive of a shooting: Location, Hour of the day, and BORO. Next, I joined covid data from another project to see if covid and the underlying policy changes had an impact on shootings. 
 
-##Biases 
+## Biases 
  I noticed that my choice of variables were due to my own biases. We hear that certain parts of New York are more dangerous then others. We hear not to go into central park at night and that shootings can be gang related, concentrated in public housing.
  
 Covid has changed the world and I have always wondered what the societal impact has been. The data that I included in my analysis is people transportation data, vaccination data, as well as case and death rates.
@@ -35,7 +35,7 @@ I then manufactured features for the model.I normalized the covid data against t
 I created new features to use in the prediction like percent change and number change in both cases and deaths.
  
  
-##Conclusion:
+## Conclusion
 
 I came to 2 conclusions with this analysis:
 
@@ -45,7 +45,7 @@ I came to 2 conclusions with this analysis:
 
 This finding most likely is due to the time series associated with covid. As this pandemic has continued people have continued to suffer hardship and by coincidence more people have gotten vaccinated. 
 
-##Next Action:
+## Next Action
 
 There are a lot of things to analyze with this data specifically within the Covid lens. The Covid data comes by county and it would be interesting to see if the relationship between covid and shootings is stronger in certain Boroughs. Further I would like to see if the relationship is stronger in different types of shooting situations like in public housing vs bars.
 
@@ -101,7 +101,7 @@ multiVariateData <- cleanDate %>% drop_na() %>% group_by(LOCATION_DESC, BORO, Ho
 ```
 
 
-```{r data grouping}
+```{r data grouping covid}
 
 ny_regression_data <-  filter(baseCovidData, stateAbbrev == "NY")
 
@@ -115,7 +115,7 @@ covid_shooting_regression_data <- ny_regression_data %>% inner_join(shootingByDa
 ```{r sampling }
 set.seed(222)
  
-sample_size = round(nrow(multiVariateData)*.70) # setting what is 70%
+sample_size = round(nrow(multiVariateData)*.95)
 index <- sample(seq_len(nrow(multiVariateData)), size = sample_size)
  
 train <- multiVariateData[index, ]
@@ -123,10 +123,10 @@ test <- multiVariateData[-index, ]
 
 ```
 
-```{r sampling }
+```{r sampling covid}
 set.seed(222)
  
-sample_size = round(nrow(covid_shooting_regression_data)*.70) # setting what is 70%
+sample_size = round(nrow(covid_shooting_regression_data)*.90)
 index <- sample(seq_len(nrow(covid_shooting_regression_data)), size = sample_size)
  
 train_covid <- covid_shooting_regression_data[index, ]
@@ -138,7 +138,7 @@ test_covid <- covid_shooting_regression_data[-index, ]
 
 Below are my plots of each datapoint versus the count of shootings. 
 
-```{r pressure, echo=FALSE}
+```{r plots}
 
 covid_shooting_regression_data %>% ggplot() + geom_point(aes(x = date, y = shootings), color = "red")+
   geom_point(aes(x = date, y = not_home_rate), color = "blue")+geom_point(aes(x = date, y = vaccine_rate), color = "purple")+geom_point(aes(x = date, y = pct_change_cases), color = "yellow")
@@ -176,19 +176,17 @@ summary(mod)
 ```
 Below I run my multivariate linear model with covid variables versus shootings. The goal is to see if covid has had an impact on shootings.  
 
-```{r data model}
+```{r data model covid}
 mod_covid <- lm(shootings ~ not_home_rate+home_rate+pct_change_death+pct_change_cases+vaccine_rate, data = train_covid)
 
 summary(mod_covid)
 ```
-```{r data model refine}
+```{r data model refine covid}
 pred = predict(mod_covid, test_covid, interval = "prediction")
 conf = predict(mod_covid, test_covid, interval = "confidence")
 pred <- as.data.frame(pred)
 covidDataWithPrediction <- data.frame(pred,test_covid)
-#multiVariateDatawPred <- multiVariateData %>% rowwise() %>% mutate(predicted = #list(predict(mod, interval = "prediction")))
 
-#multiVariateDatawPred$predicted
 
 ```
 

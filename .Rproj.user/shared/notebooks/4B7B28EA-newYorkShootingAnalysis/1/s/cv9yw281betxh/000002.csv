@@ -1,6 +1,6 @@
 "0","set.seed(222)"
 "0"," "
-"0","sample_size = round(nrow(covid_shooting_regression_data)*.70) # setting what is 70%"
+"0","sample_size = round(nrow(covid_shooting_regression_data)*.90) # setting what is 70%"
 "0","index <- sample(seq_len(nrow(covid_shooting_regression_data)), size = sample_size)"
 "0"," "
 "0","train_covid <- covid_shooting_regression_data[index, ]"
