@@ -1,0 +1,224 @@
+---
+title: "Analysis of New York Shooting Data"
+author: ''
+date: "9/26/2021"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(tinytex)
+```
+## Summary
+In this document I test 2 seperate datasets to see if any statistically significant results can be found. I first focused on features within the datasets to try and predict shootings. I focused on 3 variables that I felt would be predictive of a shooting: Location, Hour of the day, and BORO. Next, I joined covid data from another project to see if covid and the underlying policy changes had an impact on shootings. 
+
+##Biases 
+ I noticed that my choice of variables were due to my own biases. We hear that certain parts of New York are more dangerous then others. We hear not to go into central park at night and that shootings can be gang related, concentrated in public housing.
+ 
+Covid has changed the world and I have always wondered what the societal impact has been. The data that I included in my analysis is people transportation data, vaccination data, as well as case and death rates.
+
+## Method
+
+The first step I took was getting data from reproducible sources. I was able to get good data from both government agencies and news sources. 
+
+The second step was to clean the data, pivot, and group it by the same grain. 
+
+I then manufactured features for the model.I normalized the covid data against the total population where it made sense like vaccinations and population mobility.
+
+I created new features to use in the prediction like percent change and number change in both cases and deaths.
+ 
+ 
+##Conclusion:
+
+I came to 2 conclusions with this analysis:
+
+1. I was hoping for an unexpected outlier but it appears most shootings do happen at night, outside of Manhattan, and in public housing or bars. 
+
+2. I expected mobility to have a larger impact on crime and was surprised that the most statistically significant feature in the covid data is the rate of vaccines. Even more surprising is that shootings increase with vaccinations.
+
+This finding most likely is due to the time series associated with covid. As this pandemic has continued people have continued to suffer hardship and by coincidence more people have gotten vaccinated. 
+
+##Next Action:
+
+There are a lot of things to analyze with this data specifically within the Covid lens. The Covid data comes by county and it would be interesting to see if the relationship between covid and shootings is stronger in certain Boroughs. Further I would like to see if the relationship is stronger in different types of shooting situations like in public housing vs bars.
+
+
+```{r data download}
+url_in <- "https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD"
+
+baseData <- read_csv(url_in)
+baseData <- select(baseData, 1:15)
+url_in <- "https://data.cityofnewyork.us/api/views/5ucz-vwe8/rows.csv?accessType=DOWNLOAD"
+
+currentData <-read_csv(url_in)
+currentData <- select(currentData, 1:15)
+baseData <- rbind(currentData, baseData)
+```
+
+```{r data download covid}
+url_in <- "https://raw.githubusercontent.com/preuscht/covid-19-analysis/main/covid_data.csv"
+
+baseCovidData <- read_csv(url_in)
+
+```
+
+In order to get the Hour of each shooting I had to separate the OCCUR_TIME field. 
+
+```{r data cleanse}
+
+cleanDate <- baseData %>% mutate(date = mdy(OCCUR_DATE)) 
+
+cleanDate <- cleanDate %>% separate(OCCUR_TIME, c("Hour", "Minute", "Second"), ":")
+
+summary(cleanDate)
+
+```
+Many locations were None or NA. I chose to drop them from my data set while graphing. There were upwards of 30 different locations which were too many for the graphs which I choose. I decided to limit to the top 10 for graphing purposes.
+
+In this section I also group by hour as well created my multivariate data set for the model.
+
+```{r data grouping}
+
+shootingByLocation <- cleanDate %>% drop_na() %>% filter(LOCATION_DESC != "NONE") %>% group_by(LOCATION_DESC) %>% summarize(shootings = n())
+
+top10Locations <- shootingByLocation %>% slice_max(shootings, n=10)
+
+shootingByDate <- cleanDate %>% group_by(date) %>% summarize(shootings = n())
+
+shootingByTime <- cleanDate %>% group_by(Hour) %>% summarize(shootings = n())
+
+shootingByBORO <- cleanDate %>% group_by(BORO) %>% summarize(shootings = n())
+
+multiVariateData <- cleanDate %>% drop_na() %>% group_by(LOCATION_DESC, BORO, Hour) %>% summarize(shootings = n())
+
+```
+
+
+```{r data grouping}
+
+ny_regression_data <-  filter(baseCovidData, stateAbbrev == "NY")
+
+covid_shooting_regression_data <- ny_regression_data %>% inner_join(shootingByDate,by="date")
+
+```
+
+
+## Training Data Creation
+
+```{r sampling }
+set.seed(222)
+ 
+sample_size = round(nrow(multiVariateData)*.70) # setting what is 70%
+index <- sample(seq_len(nrow(multiVariateData)), size = sample_size)
+ 
+train <- multiVariateData[index, ]
+test <- multiVariateData[-index, ]
+
+```
+
+```{r sampling }
+set.seed(222)
+ 
+sample_size = round(nrow(covid_shooting_regression_data)*.70) # setting what is 70%
+index <- sample(seq_len(nrow(covid_shooting_regression_data)), size = sample_size)
+ 
+train_covid <- covid_shooting_regression_data[index, ]
+test_covid <- covid_shooting_regression_data[-index, ]
+
+```
+
+## Including Plots
+
+Below are my plots of each datapoint versus the count of shootings. 
+
+```{r pressure, echo=FALSE}
+
+covid_shooting_regression_data %>% ggplot() + geom_point(aes(x = date, y = shootings), color = "red")+
+  geom_point(aes(x = date, y = not_home_rate), color = "blue")+geom_point(aes(x = date, y = vaccine_rate), color = "purple")+geom_point(aes(x = date, y = pct_change_cases), color = "yellow")
+
+ggplot(top10Locations, aes(x="", y=shootings, fill=LOCATION_DESC)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)
+
+ggplot(top10Locations, aes(x=LOCATION_DESC, y=shootings)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90))
+
+ggplot(shootingByBORO, aes(x="", y=shootings, fill=BORO)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)
+
+ggplot(shootingByBORO, aes(x=BORO, y=shootings)) + 
+  geom_bar(stat = "identity") + 
+  theme(axis.text.x = element_text(angle = 90))
+
+ggplot(shootingByTime, aes(x="", y=shootings, fill=Hour)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)
+
+ggplot(shootingByTime, aes(x=Hour, y=shootings)) + 
+  geom_bar(stat = "identity")
+```
+
+Below I run my multivariate linear model with three variables versus shootings. Time of day, Location, and BORO have statistically significant results. 
+
+```{r data model}
+mod <- lm(shootings ~ Hour+BORO+LOCATION_DESC, data = train)
+
+summary(mod)
+```
+Below I run my multivariate linear model with covid variables versus shootings. The goal is to see if covid has had an impact on shootings.  
+
+```{r data model}
+mod_covid <- lm(shootings ~ not_home_rate+home_rate+pct_change_death+pct_change_cases+vaccine_rate, data = train_covid)
+
+summary(mod_covid)
+```
+```{r data model refine}
+pred = predict(mod_covid, test_covid, interval = "prediction")
+conf = predict(mod_covid, test_covid, interval = "confidence")
+pred <- as.data.frame(pred)
+covidDataWithPrediction <- data.frame(pred,test_covid)
+#multiVariateDatawPred <- multiVariateData %>% rowwise() %>% mutate(predicted = #list(predict(mod, interval = "prediction")))
+
+#multiVariateDatawPred$predicted
+
+```
+
+
+```{r data model refine}
+pred = predict(mod, test, interval = "prediction")
+conf = predict(mod, test, interval = "confidence")
+pred <- as.data.frame(pred)
+multiVariateDatawPred <- data.frame(pred,test)
+#multiVariateDatawPred <- multiVariateData %>% rowwise() %>% mutate(predicted = #list(predict(mod, interval = "prediction")))
+
+#multiVariateDatawPred$predicted
+
+```
+
+I finally plotted the predictions versus each feature. These plots give you the range of predictions and the coverage that the variable has. Location seems most closely tied with shootings. However it does underpredict the amount of shootings in public housing and night clubs. 
+
+```{r model plot}
+
+
+covidDataWithPrediction %>% ggplot() + geom_point(aes(x = date, y = shootings), color = "blue")+
+  geom_point(aes(x = date, y = fit), color ="red")
+
+multiVariateDatawPred %>% ggplot() + geom_point(aes(x = Hour, y = shootings), color = "blue")+
+  geom_point(aes(x = Hour, y = fit), color ="red")
+
+multiVariateDatawPred %>% ggplot() + geom_point(aes(x = BORO, y = shootings), color = "blue")+
+  geom_point(aes(x = BORO, y = fit), color ="red")
+
+multiVariateDatawPred %>% ggplot() + geom_point(aes(x = LOCATION_DESC, y = shootings), color = "blue")+
+  geom_point(aes(x = LOCATION_DESC, y = fit), color ="red")+theme(axis.text.x = element_text(angle = 90))
+
+```
